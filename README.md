@@ -1,6 +1,6 @@
 ![Python](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue)
 ![Platform](https://img.shields.io/badge/platform-windows%20%7C%20linux%20%7C%20macos-lightgrey)
-![Build](https://github.com/fractal-analytics-platform/napari-plugins/workflows/build/badge.svg?branch=master)
+![Build](https://github.com/fractal-napari-plugins-collection/napari_hdf5_reader/actions/workflows/build.yml/badge.svg?branch=master)
 
 # Napari - Plugins
 This repository contains the following Napari plugins developed for the Fractal

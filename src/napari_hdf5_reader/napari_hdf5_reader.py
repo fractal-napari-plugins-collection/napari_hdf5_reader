@@ -8,7 +8,7 @@ from napari_plugin_engine import napari_hook_implementation
 import h5py
 # import numpy as np
 from magicgui.widgets import FunctionGui
-# pylint: disable=E0611
+# pylint: disable=E0611,W0611
 from qtpy.QtWidgets import QMessageBox, QFileDialog
 from napari.utils.notifications import show_info
 from napari.types import LayerDataTuple
@@ -194,27 +194,37 @@ class HDF5VisualizerWidget(FunctionGui):
                 name = key
             return dask_image, scale, type_layer, name
 
-        else:
-            for level in range(len(file[str(key)])):
-                dataset = file[str(key)+"/"+str(level)]
-                data_arr = da.from_array(dataset, chunks=(1, 256, 256))
-                dask_image.append(data_arr)
-                scale = file[str(key) + "/0"].attrs["element_size_um"]
-                type_layer = "image"
-                if val != "":
-                    name = val
-                else:
-                    name = key
-            return dask_image, scale, type_layer, name
+
+        for level in range(len(file[str(key)])):
+            dataset = file[str(key)+"/"+str(level)]
+            data_arr = da.from_array(dataset, chunks=(1, 256, 256))
+            dask_image.append(data_arr)
+            scale = file[str(key) + "/0"].attrs["element_size_um"]
+            type_layer = "image"
+            if val != "":
+                name = val
+            else:
+                name = key
+        return dask_image, scale, type_layer, name
 
     @staticmethod
     def load_channel(path, key):
+        """
+        Method to load image or label layer in napari,
+        starting from an hdf5 file.
+
+        :param path: path of hdf5 files
+        :param key: the key whith which select the Channel
+        :return: None or the dask array with other metadata
+        """
+
         file = HDF5VisualizerWidget.read_hdf5(path)
         dask_image = []
         dict_ks = {}
         if not hasattr(file, "keys"):
             show_info("Bad HDF5 file format, no keys were found")
-            return
+            return None
+        # pylint: disable=C0206
         for keys in file.keys():
             if isinstance(file[keys], h5py.Dataset):
                 dict_ks[keys] = file[keys].attrs['stain']
@@ -226,11 +236,11 @@ class HDF5VisualizerWidget(FunctionGui):
         if key in val_list:
             pos = val_list.index(key)
             chan = key_list[pos]
-            dask_image, scale, type, name = HDF5VisualizerWidget.ret_image(chan, file, val=key)
-            return dask_image, scale, type, name
-        else:
-            dask_image, scale, type, name = HDF5VisualizerWidget.ret_image(key, file)
-            return dask_image, scale, type, name
+            dask_image, scale, type_lay, name = HDF5VisualizerWidget.ret_image(chan, file, val=key)
+            return dask_image, scale, type_lay, name
+
+        dask_image, scale, type_lay, name = HDF5VisualizerWidget.ret_image(key, file)
+        return dask_image, scale, type_lay, name
 
     @staticmethod
     def apply(
@@ -245,12 +255,12 @@ class HDF5VisualizerWidget(FunctionGui):
         """
         if hdf5_file == "":
             show_info("No hdf5 file was selected for visualization!")
-            return
-        elif keys == "":
+            return None
+        if keys == "":
             show_info("No key was selected for visualization!")
-            return
-        dask_image, scale, type, name = HDF5VisualizerWidget.load_channel(hdf5_file, keys)
-        return (dask_image, {'scale': scale, 'name': name, 'blending': 'additive'}, type)
+            return None
+        dask_image, scale, type_lay, name = HDF5VisualizerWidget.load_channel(hdf5_file, keys)
+        return (dask_image, {'scale': scale, 'name': name, 'blending': 'additive'}, type_lay)
 
 
 @napari_hook_implementation

@@ -194,7 +194,6 @@ class HDF5VisualizerWidget(FunctionGui):
                 name = key
             return dask_image, scale, type_layer, name
 
-
         for level in range(len(file[str(key)])):
             dataset = file[str(key)+"/"+str(level)]
             data_arr = da.from_array(dataset, chunks=(1, 256, 256))
@@ -284,7 +283,7 @@ def napari_experimental_provide_dock_widget():
     #     return data
 
 
-#tile_size=256
+# tile_size=256
 # for level in range(len(file[str(key)])):
 #     dataset=file[str(key)+'/'+str(level)]
 #     read_tile2=partial(read_tile,dataset)
@@ -319,12 +318,12 @@ def napari_experimental_provide_dock_widget():
 #                 [
 #
 #                 da.from_delayed(lazy_read(x*tile_size,
-                                            # y*tile_size,
-                                            # tile_size,
-                                            # tile_size,
-                                            # image_height,
-                                            # image_width,
-                                            # z),
+#                                           y*tile_size,
+#                                           tile_size,
+#                                           tile_size,
+#                                           image_height,
+#                                           image_width,
+#                                           z),
 #                     shape=(tile_size, tile_size), dtype=np.uint8
 #                 )
 #                 for y in range(y_tiles)

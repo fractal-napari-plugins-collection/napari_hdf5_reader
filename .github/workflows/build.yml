@@ -19,7 +19,7 @@ jobs:
         apt install -y software-properties-common
         add-apt-repository ppa:deadsnakes/ppa
         apt update
-        apt install -y python${{ matrix.python-version }} python${{ matrix.python-version }}-dev python3-pip git
+        apt install -y python${{ matrix.python-version }} python${{ matrix.python-version }}-dev python3-pip git qt5-default
         python${{ matrix.python-version }} -m pip install pip setuptools wheel --upgrade
         if [ ! -e /usr/bin/python ]; then ln -sf python${{ matrix.python-version }} /usr/bin/python ; fi
         if [ ! -e /usr/bin/pip ]; then ln -s /usr/local/bin/pip${{ matrix.python-version }} /usr/bin/pip ; fi

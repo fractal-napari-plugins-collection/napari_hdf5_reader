@@ -23,9 +23,9 @@ jobs:
         python${{ matrix.python-version }} -m pip install pip setuptools wheel --upgrade
         if [ ! -e /usr/bin/python ]; then ln -sf python${{ matrix.python-version }} /usr/bin/python ; fi
         if [ ! -e /usr/bin/pip ]; then ln -s /usr/local/bin/pip${{ matrix.python-version }} /usr/bin/pip ; fi
-    - name: Setup xvfb
-      run: |
-        apt-get install -y xvfb libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xinput0 libxcb-xfixes0
+    #- name: Setup xvfb
+     # run: |
+      #  apt-get install -y xvfb libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xinput0 libxcb-xfixes0
         # python${{ matrix.python-version }} -m pip install pytest-xvfb
         # start xvfb in the background
         # /usr/bin/Xvfb $DISPLAY -screen 0 1280x1024x24 &
@@ -39,6 +39,7 @@ jobs:
         pycodestyle --max-line-length=120 src
     - name: Run tests
       run: |
+        export QT_QPA_PLATFORM=offscreen
         coverage run --source=src ./setup.py test
         # stop the build if the test coverage is under 80%
         # coverage report --fail-under=80

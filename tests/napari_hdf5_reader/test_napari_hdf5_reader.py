@@ -15,8 +15,6 @@ import pytest
 from napari_hdf5_reader.napari_hdf5_reader import HDF5VisualizerWidget
 
 
-
-
 @pytest.fixture(scope='module')
 def feature_vis_widget():
     """
@@ -47,12 +45,12 @@ def _check_empty_keys(feature_vis_widget, mocked_show_info):
 def _check_wrong_obj(feature_vis_widget,mocker, mocked_show_info):
     mocker.patch(
         'napari_hdf5_reader.napari_hdf5_reader.HDF5VisualizerWidget.read_hdf5',
-        return_value=["test", "123"]
+        return_value = ["test", "123"]
     )
-    channel=feature_vis_widget.load_channel(path="data.hdf5",key=0)
+    channel = feature_vis_widget.load_channel(path="data.hdf5",key=0)
 
     assert (
-        channel== None
+        channel == None
     )
 
 
@@ -63,7 +61,7 @@ def test_feature_visualizer_widget(feature_vis_widget, mocker):
     """
     mocked_show_info = mocker.patch(
         'napari_hdf5_reader.napari_hdf5_reader.show_info',
-        new_callable=mocker.PropertyMock
+        new_callable = mocker.PropertyMock
     )
 
     _check_empty_layer(feature_vis_widget, mocked_show_info)

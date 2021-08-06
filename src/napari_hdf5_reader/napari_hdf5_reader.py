@@ -224,7 +224,6 @@ class HDF5VisualizerWidget(FunctionGui):
         if not hasattr(file, "keys"):
             show_info("Bad HDF5 file format, no keys were found")
             return None
-        # pylint: disable=C0206
         for keys in file.keys():
             if isinstance(file[keys], h5py.Dataset):
                 dict_ks[keys] = file[keys].attrs['stain']

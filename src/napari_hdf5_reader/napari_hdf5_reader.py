@@ -1,3 +1,4 @@
+"""System module."""
 import os
 # from functools import lru_cache
 # import random
@@ -140,8 +141,7 @@ class HDF5VisualizerWidget(FunctionGui):
                             name = key
                     k.append(name)
                 return sorted(k)
-            else:
-                return [""]
+            return [""]
 
         self.keys._default_choices = get_keys
 
@@ -187,12 +187,12 @@ class HDF5VisualizerWidget(FunctionGui):
             dataset = file[str(key)]
             dask_image = da.from_array(dataset, chunks=(1, 256, 256))
             scale = file[str(key)].attrs["element_size_um"]
-            type = "labels"
+            type_layer = "labels"
             if val != "":
                 name = val
             else:
                 name = key
-            return dask_image, scale, type, name
+            return dask_image, scale, type_layer, name
 
         else:
             for level in range(len(file[str(key)])):
@@ -200,12 +200,12 @@ class HDF5VisualizerWidget(FunctionGui):
                 data_arr = da.from_array(dataset, chunks=(1, 256, 256))
                 dask_image.append(data_arr)
                 scale = file[str(key) + "/0"].attrs["element_size_um"]
-                type = "image"
+                type_layer = "image"
                 if val != "":
                     name = val
                 else:
                     name = key
-            return dask_image, scale, type, name
+            return dask_image, scale, type_layer, name
 
     @staticmethod
     def load_channel(path, key):

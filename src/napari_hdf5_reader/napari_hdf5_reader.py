@@ -151,6 +151,9 @@ class HDF5VisualizerWidget(FunctionGui):
             Callback method for change events on the hdf5_file widget.
             :param event: The change event.
             """
+            # NOTE: self.keys.reset_choices() may not reset all choices and keep old,
+            # invalid names. Hence, we force a reset of all choices beforehand.
+            self.keys.choices = []
             self.keys.reset_choices()
 
         self.native.layout().addStretch()

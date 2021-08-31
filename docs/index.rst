@@ -6,4 +6,4 @@ The HDF5 file format is an open source file format that supports large, complex,
 
 HDF5 Reader is a dock widget, which makes easier the visualization of data wrapped into hdf5 file format. It opens a dialog window to select the .hdf5 file and then gives the possibility to choose the data by a dropdown menu.
 
-.. note:: Note: Data are loaded in Napari as Image or Label layer.
+.. note:: Data are loaded in Napari as Image or Label layer.

@@ -2,7 +2,8 @@
 import os
 # from functools import lru_cache
 # import random
-import dask.array as da
+import numpy as np
+# import dask.array as da
 from napari_plugin_engine import napari_hook_implementation
 # from dask import delayed
 import h5py
@@ -187,8 +188,8 @@ class HDF5VisualizerWidget(FunctionGui):
         """
         dask_image = []
         if isinstance(file[str(key)], h5py.Dataset):
-            dataset = file[str(key)]
-            dask_image = da.from_array(dataset, chunks=(1, 256, 256))
+            dask_image = np.asarray(file[str(key)])
+            # dask_image = da.from_array(dataset, chunks=(1, 256, 256))
             scale = file[str(key)].attrs["element_size_um"]
             type_layer = "labels"
             if val != "":
@@ -199,7 +200,8 @@ class HDF5VisualizerWidget(FunctionGui):
 
         for level in range(len(file[str(key)])):
             dataset = file[str(key)+"/"+str(level)]
-            data_arr = da.from_array(dataset, chunks=(1, 256, 256))
+            data_arr = np.asarray(dataset)
+            # data_arr = da.from_array(dataset, chunks=(1, 256, 256))
             dask_image.append(data_arr)
             scale = file[str(key) + "/0"].attrs["element_size_um"]
             type_layer = "image"
@@ -226,6 +228,7 @@ class HDF5VisualizerWidget(FunctionGui):
         if not hasattr(file, "keys"):
             show_info("Bad HDF5 file format, no keys were found")
             return None
+        # pylint: disable=C0206
         for keys in file.keys():
             if isinstance(file[keys], h5py.Dataset):
                 dict_ks[keys] = file[keys].attrs['stain']

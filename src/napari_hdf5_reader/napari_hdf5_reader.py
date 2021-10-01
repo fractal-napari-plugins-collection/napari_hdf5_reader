@@ -1,16 +1,10 @@
 """System module."""
 import os
-# from functools import lru_cache
-# import random
 import numpy as np
-# import dask.array as da
 from napari_plugin_engine import napari_hook_implementation
-# from dask import delayed
 import h5py
-# import numpy as np
 from magicgui.widgets import FunctionGui
-# pylint: disable=E0611,W0611
-from qtpy.QtWidgets import QMessageBox, QFileDialog
+from qtpy.QtWidgets import QMessageBox, QFileDialog  # pylint: disable=E0611,W0611
 from napari.utils.notifications import show_info
 from napari.types import LayerDataTuple
 
@@ -119,7 +113,6 @@ class HDF5VisualizerWidget(FunctionGui):
         )
 
         def get_keys(*args):
-
             # pylint: disable=W0613
             """
             Method for extracting the keys from the hdf5 file.
